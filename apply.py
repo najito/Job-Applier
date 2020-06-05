@@ -18,7 +18,7 @@ URL_l1 = 'https://jobs.lever.co/figma/91da97b9-ff1d-4e08-a2f1-4867537e5eb2'
 URL_l2 = 'https://jobs.lever.co/blendlabs/2a469512-a8c2-44fa-a260-ef3ae0c90db7'
 URL_l3 = 'https://jobs.lever.co/affirm/5340f1d3-cd6d-44ef-a5c6-f9def8609d02'
 URL_l4 = 'https://jobs.lever.co/grandrounds/cbf92d6f-83c2-41a3-b1a7-350e338c76a7'
-URL_1 = 'https://boards.greenhouse.io/paige/jobs/4224875002'
+URL_1 = 'https://boards.greenhouse.io/connectedfitness/jobs/2182265'
 
 # there's probably a prettier way to do all of this
 # URLS = [URL_g1, URL_g2, URL_g3, URL_g4, URL_l1, URL_l2, URL_l3, URL_l4] # to test all the URLS
@@ -34,7 +34,7 @@ JOB_APP = {
     "resume": "resume.pdf",
     "resume_textfile": "resume_short.txt",
     "linkedin": "https://www.linkedin.com/in/nobuhide-ajito/",
-    "website": "",
+    "website": "none",
     "github": "https://github.com/najito",
     "twitter": "",
     "location": "Santa Monica, CA, United States",
@@ -101,12 +101,13 @@ def greenhouse(driver):
 
     # add linkedin
     try:
-        driver.find_element_by_xpath("//label[contains(.,'LinkedIn')]").send_keys(JOB_APP['linkedin'])
+        driver.find_element_by_css_selector("[autocomplete='custom-question-linkedin-profile']").send_keys(JOB_APP['linkedin'])
     except NoSuchElementException:
-        try:
-            driver.find_element_by_xpath("//label[contains(.,'Linkedin')]").send_keys(JOB_APP['linkedin'])
-        except NoSuchElementException:
-            pass
+        pass
+        # try:
+        #     driver.find_element_by_css_selector("[autocomplete='custom-question-linkedin-profile']").send_keys(JOB_APP['linkedin'])
+        # except NoSuchElementException:
+        #     pass
 
     # add graduation year
     # try:
@@ -134,7 +135,7 @@ def greenhouse(driver):
 
     # add website
     try:
-        driver.find_element_by_xpath("//label[contains(.,'Website')]").send_keys(JOB_APP['website'])
+        driver.find_element_by_css_selector("[autocomplete='custom-question-website']").send_keys(JOB_APP['website'])
     except NoSuchElementException:
         pass
 
