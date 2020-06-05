@@ -234,4 +234,4 @@ if __name__ == '__main__':
             lever(driver)
 
         time.sleep(1) # can lengthen this as necessary (for captcha, for example)
-    driver.close()
+    # driver.close()
