@@ -4,6 +4,11 @@ from selenium.webdriver.common.keys import Keys
 import os # to get the resume file
 import time # to sleep
 
+with open("apply.py") as fp:
+    for i, line in enumerate(fp):
+        if "\xe2" in line:
+            print i, repr(line)
+
 # sample applications
 URL_g1 = 'https://boards.greenhouse.io/braintree/jobs/1316736?gh_jid=1316736&gh_src=1d1244401'
 URL_g2 = 'https://boards.greenhouse.io/gusto/jobs/1862076'
@@ -13,7 +18,7 @@ URL_l1 = 'https://jobs.lever.co/figma/91da97b9-ff1d-4e08-a2f1-4867537e5eb2'
 URL_l2 = 'https://jobs.lever.co/blendlabs/2a469512-a8c2-44fa-a260-ef3ae0c90db7'
 URL_l3 = 'https://jobs.lever.co/affirm/5340f1d3-cd6d-44ef-a5c6-f9def8609d02'
 URL_l4 = 'https://jobs.lever.co/grandrounds/cbf92d6f-83c2-41a3-b1a7-350e338c76a7'
-URL_1 = 'https://boards.greenhouse.io/braceai/jobs/4061507003'
+URL_1 = 'https://boards.greenhouse.io/paige/jobs/4224875002'
 
 # there's probably a prettier way to do all of this
 # URLS = [URL_g1, URL_g2, URL_g3, URL_g4, URL_l1, URL_l2, URL_l3, URL_l4] # to test all the URLS
@@ -34,7 +39,7 @@ JOB_APP = {
     "twitter": "",
     "location": "Santa Monica, CA, United States",
     "grad_month": '06',
-    "grad_year": '2021',
+    "grad_year": '2017',
     "university": "University of California: Santa Barbara",
 }
 
@@ -51,20 +56,19 @@ def greenhouse(driver):
     company_name = driver.find_element_by_class_name('company-name').text.lstrip('at').lstrip()
     position = driver.find_element_by_class_name('app-title').text
 
-    cover_letter = '''Hi there,
+    cover_letter ='''Hi there,
 
-    I was excited to see the {position} position at {company_name}. I’m glad I have the opportunity to apply.
-
-    I primarily work in Javascript/Node.js/SQL but I recently took a deep dive into front-end bundle deployment and bundling optimization for my most recent developer tool named Auxpack. My team and I developed a Webpack bundle analysis and optimization tool that visualizes assets and dependencies and apply recommendations like tree-shaking to reduce bundle size, lower ramp up time, speed up dev workflow and faster meaningful hydration and perceived performance by the user.
-
-    I also recently gave a talk at the Ethiq Software Engineering Speaker Series about utilizing build tools for creating a better developer workflow and was curious regarding the tool and framework choice utilized at {company_name}- I know there is a constant back and forth regarding frameworks like Flask versus Django between their flexibility and lightweight startup vs out-of-the-box toolkit size. 
-
-    I’d be happy to talk more about the challenges you are working on and wanted to see if you’d be available to chat about {company_name}’s architecture, the engineering culture on the team, and also any particulars about the role itself. I’m available next Wed-Fri from 9am PST to noon to chat or please let me know if there is a more convenient time.
-
+    I was excited to see the %s open at %s. I'm glad I have the opportunity to apply.
+    
+    I primarily work in JavaScript/Node.js/SQL but I recently took a deep dive into front-end bundle deployment and bundling optimization for my most recent developer tool name Auxpack. My team and I developed a Webpack bundle analysis and optimization tool that visualizes assets and dependencies and offers recommendations like tree-shaking to reduce bundle size, lower ramp up time, speed up dev workflow and faster meaningful hydration and perceived performance by the user.
+    
+    I also recently gave a talk at the Ethiq Software Engineering Speaker series about utilizing build tools for creating a better developer workflow and was curious regarding the tool and framework choice utilized at %s- I know there is a constant back and forth regarding frameworks like Flask versus Django between their flexibility and lightweight start vs out-of-the-box toolkit size.
+    
+    I'd be happy to talk more about the challenges you are working on and wanted to see if you'd be available to chat about %s's architecture, the engineering culture on the team, and also any particulars about the role itself. I'm available next Wed-Fri from 9am PST to noon to chat or please let me know if there is a more convenient time.
+    
     Best,
-    Nobu'''
+    Nobu''' % (position, company_name, company_name, company_name)
 
-    # This doesn't exactly work, so a pause was added for the user to complete the action
     try:
         loc = driver.find_element_by_id('job_application_location')
         loc.send_keys(JOB_APP['location'])
@@ -91,7 +95,7 @@ def greenhouse(driver):
     # Type in cover letter
     try:
         driver.find_element_by_css_selector("[data-field='cover_letter']").find_element_by_css_selector("[data-source='paste']").click()
-        cover_letter_zone = driver.find_element_by_id('cover_letter_text').send_keys(cover_letter)
+        driver.find_element_by_id('cover_letter_text').send_keys(cover_letter)
     except NoSuchElementException:
         pass
 
@@ -136,7 +140,7 @@ def greenhouse(driver):
 
     # add where job was found
     try:
-        driver.find_element_by_xpath("//labe;[contains(.,'hear')]").send_keys('Blind Job Board')
+        driver.find_element_by_xpath("//label[contains(.,'hear')]").send_keys('Blind Job Board')
     except NoSuchElementException:
         pass
 
@@ -151,8 +155,8 @@ def greenhouse(driver):
         sponsor = driver.find_element_by_xpath("//label[contains(.,'sponsorship')]")
         for option in sponsor.find_elements_by_tag_name('option'):
             if option.text == 'No':
-            option.click()
-            break
+                option.click()
+                break
     except NoSuchElementException:
         pass
     
@@ -161,8 +165,8 @@ def greenhouse(driver):
         authorization = driver.find_element_by_xpath("//label[contains(.,'authorized')]")
         for option in authorization.find_elements_by_tag_name('option'):
             if option.text == 'No':
-            option.click()
-            break
+                option.click()
+                break
     except NoSuchElementException:
         pass
 
